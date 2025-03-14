@@ -4,6 +4,7 @@
 
 void CmdExecuter::ExecutePartCmd(const CmdEntry& cmdEntry, ClientProxy& client, Server& server)
 {
+    // check if the channel to be parted from is specified
     if (cmdEntry.args.empty())
     {
         server.SendDataToClient(client, IRCResponseCreator::NeedMoreParams("PART"));
@@ -14,6 +15,7 @@ void CmdExecuter::ExecutePartCmd(const CmdEntry& cmdEntry, ClientProxy& client, 
 
     for (size_t i = 0; i < channels.size(); ++i)
     {
+        // check if channel exist on the server
         std::string channelName = channels[i];
         if (channelName.empty() || channelName[0] != '#' || !server.IsChannelExist(channelName))
         {
@@ -21,6 +23,8 @@ void CmdExecuter::ExecutePartCmd(const CmdEntry& cmdEntry, ClientProxy& client, 
             continue;
         }
 
+
+        // check whether the client is on the channel or not
 
         Channel& channel = server.GetOrCreateChannel(channelName);
 
@@ -32,7 +36,6 @@ void CmdExecuter::ExecutePartCmd(const CmdEntry& cmdEntry, ClientProxy& client, 
 
         channel.RemoveClient(client.GetSocketFD());
         channel.RemoveOperator(client.GetSocketFD());
-
 
 
         std::string partMessage = ":" + client.GetNickname() + "!" + client.GetUsername() + "@" + client.GetIPAddress() + " PART " + channelName + CRLF;

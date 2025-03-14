@@ -37,11 +37,15 @@ public:
     void SetRealname(const std::string& realname);
 
     void SetHostname(const std::string& hostname);
+    const std::string& GetHostname() const;
+
 
     void SetServername(const std::string& servername);
 
     bool IsRegistered() const;
     void SetHasAuthedTo(bool hasAuthed);
+    bool GetHasAuthed() const;
+    bool IsUserRegistrationComplete() const;
 
     
 };

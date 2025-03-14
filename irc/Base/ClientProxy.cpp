@@ -53,7 +53,7 @@ const std::string& ClientProxy::GetNickname() const
     return _nickname;
 }
 
-bool ClientProxy::IsRegistered() const
+bool ClientProxy::IsUserRegistrationComplete() const
 {
     return !_username.empty() && !_nickname.empty() && _hasAuthed;
 }
@@ -61,6 +61,16 @@ bool ClientProxy::IsRegistered() const
 void ClientProxy::SetHasAuthedTo(bool hasAuthed)
 {
     _hasAuthed = hasAuthed;
+}
+
+bool ClientProxy::GetHasAuthed() const
+{
+    return _hasAuthed;
+}
+
+bool ClientProxy::IsRegistered() const
+{
+    return _username.empty() && _nickname.empty() && _hasAuthed;
 }
 
 void ClientProxy::SetRealname(const std::string& realname)
@@ -72,6 +82,11 @@ void ClientProxy::SetRealname(const std::string& realname)
 void ClientProxy::SetHostname(const std::string& hostname)
 {
     _hostname = hostname;
+}
+
+const std::string& ClientProxy::GetHostname() const
+{
+    return _hostname;
 }
 
 

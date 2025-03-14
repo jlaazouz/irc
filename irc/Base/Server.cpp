@@ -138,6 +138,7 @@ void Server::RemoveClientWithFD(int fd)
             for(std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
             {
                 it->second.RemoveClient(fd);
+                _clientsReceiveDataBuffers.RemoveClient(fd);
                 it->second.RemoveOperator(fd);
                 it->second.UnregisterInvite(fd);
             }
@@ -247,6 +248,7 @@ void Server::RemoveClient(ClientProxy& client)
 void Server::ProccessLine(const std::string& line, ClientProxy& client)
 {
     CmdEntry entry = ParseCommand(line);
+    entry.input = line;
     if(entry.cmd.empty())
     {
         return;
@@ -387,12 +389,18 @@ void Server::Run()
 
 Server::~Server()
 {
-    close(_socketFD);
     //Disconnect all clients
     for(size_t i = 0; i < _clients.size(); i++)
     {
-        RemoveClient(_clients[i]); 
+        // RemoveClient(_clients[i]);
+        IRCWARN("Client " + std::to_string(_clients[i].GetSocketFD()) + " Disconnected");
+        //Remove the client from all channels
+        int fd = _clients[i].GetSocketFD();
+        _clientsReceiveDataBuffers.RemoveClient(fd);
+        _clients[i].Disconnect();
     }
+    _channels.clear();
+    close(_socketFD);
 }
 
 

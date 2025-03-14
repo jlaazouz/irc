@@ -67,7 +67,7 @@ void CmdExecuter::ExecuteCmd(const CmdEntry& cmdEntry, ClientProxy& client, Serv
     }
 
     //The blow commands require the client to be registered
-    else if(!client.IsRegistered())
+    else if(!client.IsUserRegistrationComplete())
     {
         server.SendDataToClient(client, std::string("451 You have not registered ") + cmdEntry.cmd + CRLF);
         IRCLOG("Client with IP " + client.GetIPAddress() + " tried to execute a command without registering [" + cmdEntry.cmd + "]");

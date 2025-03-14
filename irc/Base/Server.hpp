@@ -17,6 +17,7 @@ struct CmdEntry
 {
     std::string cmd;
     std::vector<std::string> args;
+    std::string input;
 };
 
 

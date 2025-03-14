@@ -4,9 +4,17 @@
 
 void CmdExecuter::ExecuteUserCmd(const CmdEntry& cmdEntry, ClientProxy& client, Server& server)
 {
+    // make sure the pass cmd has at least 4 params
     if(cmdEntry.args.size() < 4)
     {
         server.SendDataToClient(client, IRCResponseCreator::NeedMoreParams("USER"));
+        return;
+    }
+
+    // make sure the password and nickname are set before accepting USER command
+    if (!client.GetHasAuthed() || client.GetNickname().empty())
+    {
+        server.SendDataToClient(client, IRCResponseCreator::NotRegistered());
         return;
     }
 
@@ -18,7 +26,7 @@ void CmdExecuter::ExecuteUserCmd(const CmdEntry& cmdEntry, ClientProxy& client, 
         client.SetRealname(cmdEntry.args[3]);
     }
 
-    if(client.IsRegistered())
+    if(client.IsUserRegistrationComplete())
     {
         SendWelcomeMessage(client, server);
     }

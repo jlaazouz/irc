@@ -26,6 +26,8 @@ public:
     
     // Check if the given buffer ends with a newline character
     static bool EndsWithNewline(const std::string& data);
+
+    void RemoveClient(int fd);
 };
 
 #endif // CLIENTS_RECEIVE_DATA_BUFFERS_HPP

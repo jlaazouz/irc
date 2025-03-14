@@ -70,3 +70,10 @@ std::vector<std::string> ClientsReceiveDataBuffers::DeleteCompleteLines(int fd)
 
     return completeLines;
 }
+
+void ClientsReceiveDataBuffers::RemoveClient(int fd)
+{
+    std::map<int, std::string>::iterator it = buffers.find(fd);
+    if(it != buffers.end())
+        buffers.erase(it);
+}

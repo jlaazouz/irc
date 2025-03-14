@@ -44,6 +44,10 @@ void CmdExecuter::ExecuteJoinCmd(const CmdEntry& cmdEntry, ClientProxy& client, 
             channel.AddOperator(client.GetSocketFD());
         }
 
+
+        if (channel.IsClientInChannel(client.GetSocketFD()))
+            return;
+
         if (channel.GetLimit() > 0 && channel.GetClientCount() >= channel.GetLimit())
         {
             server.SendDataToClient(client, IRCResponseCreator::ChannelIsFull(channelName));
